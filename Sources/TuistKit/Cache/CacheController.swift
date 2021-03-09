@@ -105,7 +105,21 @@ final class CacheController: CacheControlling {
 
     func cache(path: AbsolutePath, cacheProfile: TuistGraph.Cache.Profile, targetsToFilter: [String]) throws {
         let generator = projectGeneratorProvider.generator()
-        let (projectPath, graph) = try generator.generateWithGraph(path: path, projectOnly: false)
+        let (projectPath, generatedGraph) = try generator.generateWithGraph(path: path, projectOnly: false)
+        // TODO: Extract this to mapper and generate the project to the temp directory as we do in `tuist test`
+        // Plus apply this only when `--xcframeworks` flag has been passed to `tuist cache warm`
+        let graph = generatedGraph.with(
+            projects: generatedGraph.projects
+                .map { project in
+                    var project = project
+                    var base = project.settings.base
+                    base["BUILD_LIBRARY_FOR_DISTRIBUTION"] = "YES"
+                    project.settings = project.settings.with(
+                        base: base
+                    )
+                    return project
+                }
+        )
 
         // Lint
         cacheGraphLinter.lint(graph: graph)

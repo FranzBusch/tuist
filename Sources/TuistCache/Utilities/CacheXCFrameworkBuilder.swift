@@ -119,7 +119,6 @@ public final class CacheXCFrameworkBuilder: CacheArtifactBuilding {
                                  configuration: String,
                                  archivePath: AbsolutePath) throws
     {
-        // Without the BUILD_LIBRARY_FOR_DISTRIBUTION argument xcodebuild doesn't generate the .swiftinterface file
         _ = try xcodeBuildController.archive(
             projectTarget,
             scheme: scheme,
@@ -128,7 +127,6 @@ public final class CacheXCFrameworkBuilder: CacheArtifactBuilding {
             arguments: [
                 .sdk(target.platform.xcodeDeviceSDK),
                 .xcarg("SKIP_INSTALL", "NO"),
-                .xcarg("BUILD_LIBRARY_FOR_DISTRIBUTION", "YES"),
                 .configuration(configuration),
             ]
         )
@@ -147,7 +145,6 @@ public final class CacheXCFrameworkBuilder: CacheArtifactBuilding {
                                     configuration: String,
                                     archivePath: AbsolutePath) throws
     {
-        // Without the BUILD_LIBRARY_FOR_DISTRIBUTION argument xcodebuild doesn't generate the .swiftinterface file
         _ = try xcodeBuildController.archive(
             projectTarget,
             scheme: scheme,
@@ -156,7 +153,6 @@ public final class CacheXCFrameworkBuilder: CacheArtifactBuilding {
             arguments: [
                 .sdk(target.platform.xcodeSimulatorSDK!),
                 .xcarg("SKIP_INSTALL", "NO"),
-                .xcarg("BUILD_LIBRARY_FOR_DISTRIBUTION", "YES"),
                 .configuration(configuration),
             ]
         )
